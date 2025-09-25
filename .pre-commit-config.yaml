@@ -29,3 +29,9 @@ repos:
         language: system
         files: \.rs$
         pass_filenames: false
+      - id: collect-unmarked-tests
+        name: collect unmarked tests
+        entry: cargo run --
+        language: system
+        files: \.py$
+        pass_filenames: false

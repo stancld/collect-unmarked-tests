@@ -63,3 +63,42 @@ pytest markers like `@pytest.mark.unit` or `@skip`.
 
 - 0: No unmarked tests found
 - 1: Unmarked tests found (for CI/CD integration)
+
+## Using as a pre-commit hook
+
+Add this to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/stancld/collect-unmarked-tests
+    rev: v0.1.0  # Use a specific version tag
+    hooks:
+      - id: collect-unmarked-tests
+        args: ['--exclude-markers', 'unit,integration,component,slow']
+```
+
+To scan only specific directories/packages:
+
+```yaml
+repos:
+  - repo: https://github.com/stancld/collect-unmarked-tests
+    rev: v0.1.0
+    hooks:
+      - id: collect-unmarked-tests
+        args: ['src/mypackage', 'tests/unit']
+```
+
+Or use a local installation:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: collect-unmarked-tests
+        name: Check for unmarked pytest tests
+        entry: collect-unmarked-tests
+        language: system
+        files: '\.py$'
+        args: ['tests']
+        pass_filenames: false
+```

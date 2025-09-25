@@ -15,6 +15,10 @@ struct Args {
     /// Markers to exclude (default: unit,integration,component,skip,slow)
     #[arg(long, value_delimiter = ',')]
     exclude_markers: Option<Vec<String>>,
+
+    /// Whitelisted package modules to scan (for monorepo support)
+    #[arg(long, value_delimiter = ',')]
+    packages: Option<Vec<String>>,
 }
 
 fn main() {
@@ -34,7 +38,11 @@ fn main() {
         .into_iter()
         .collect();
 
-    let unmarked_tests = collect_unmarked_tests(&args.test_dir, &exclude_markers);
+    let unmarked_tests = if let Some(packages) = &args.packages {
+        collect_unmarked_tests_for_packages(packages, &exclude_markers)
+    } else {
+        collect_unmarked_tests(&args.test_dir, &exclude_markers)
+    };
 
     if unmarked_tests.is_empty() {
         println!("No unmarked tests found.");
@@ -45,6 +53,22 @@ fn main() {
         }
         std::process::exit(1);
     }
+}
+
+fn collect_unmarked_tests_for_packages(
+    packages: &[String],
+    exclude_markers: &HashSet<String>,
+) -> Vec<String> {
+    let mut unmarked_tests = Vec::new();
+
+    for package in packages {
+        let package_dir = PathBuf::from(package);
+        if package_dir.exists() {
+            unmarked_tests.extend(collect_unmarked_tests(&package_dir, exclude_markers));
+        }
+    }
+
+    unmarked_tests
 }
 
 fn collect_unmarked_tests(test_dir: &PathBuf, exclude_markers: &HashSet<String>) -> Vec<String> {

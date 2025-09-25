@@ -1,0 +1,8 @@
+- id: collect-unmarked-tests
+  name: Check for unmarked pytest tests
+  description: Scan for Python test functions without specific pytest markers
+  entry: collect-unmarked-tests
+  language: rust
+  files: \.py$
+  pass_filenames: false
+  require_serial: false
