@@ -2,6 +2,15 @@
 name = "collect-unmarked-tests"
 version = "0.1.0"
 edition = "2024"
+authors = ["Daniel Stancl <daniel.stancl@gmail.com>"]
+description = "A fast Rust tool to collect Python tests that don't have specific pytest markers"
+license = "MIT"
+repository = "https://github.com/stancld/collect-unmarked-tests"
+homepage = "https://github.com/stancld/collect-unmarked-tests"
+documentation = "https://docs.rs/collect-unmarked-tests"
+readme = "README.md"
+keywords = ["pytest", "testing", "python", "cli", "markers"]
+categories = ["command-line-utilities", "development-tools::testing"]
 
 [dependencies]
 regex = "1.0"
